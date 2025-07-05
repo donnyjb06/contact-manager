@@ -1,8 +1,9 @@
 import { ErrorRequestHandler } from 'express';
 const { STATUS_CODES } = require('../utils/constants');
 
-const errorHandler: ErrorRequestHandler = (err, req, res) => {
-  const status = res.statusCode ? res.statusCode : 500;
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  const status = err.statusCode ? err.statusCode : 500;
+  res.status(status)
   switch (status) {
     case STATUS_CODES.NOT_FOUND:
       res.json({
@@ -40,7 +41,7 @@ const errorHandler: ErrorRequestHandler = (err, req, res) => {
       });
       break;
     default:
-        console.log("No error! Request was successful")
+      console.log('No error! Request was successful');
       break;
   }
 };
