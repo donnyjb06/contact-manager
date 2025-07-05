@@ -5,7 +5,7 @@ const getAllContacts: RequestHandler = (req, res) => {
 }
 
 const getContact: RequestHandler = (req, res) => {
-  res.status(200).json({message: "Get individual contact"})
+  res.status(200).json({message: `Get individual contact ${req.params.id}`})
 }
 
 const postNewContact: RequestHandler = (req, res) => {
@@ -13,11 +13,11 @@ const postNewContact: RequestHandler = (req, res) => {
 }
 
 const deleteContact: RequestHandler = (req, res) => {
-  res.status(200).json({message: "Delete contact"})
+  res.status(200).json({message: `Delete contact ${req.params.id}`})
 } 
 
 const updateContact: RequestHandler = (req, res) => {
-  res.status(200).json({message: "Update contact"})
+  res.status(200).json({message: `Update contact ${req.params.id}`})
 } 
 
 

@@ -5,9 +5,9 @@ router.route("/")
   .get(getAllContacts)
   .post(postNewContact)
 
-  router.route('/:id')
-  .get(getContact)
-  .delete(deleteContact)
-  .patch(updateContact)
+router.route('/:id')
+.get(getContact)
+.delete(deleteContact)
+.patch(updateContact)
 
 module.exports = router;
