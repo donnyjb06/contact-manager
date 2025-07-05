@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
+import { Contact as ContactType } from '../types';
 
-const contactSchema: Schema = new Schema(
+const contactSchema: Schema<ContactType> = new Schema(
   {
     firstName: {
       type: String,
@@ -20,7 +21,7 @@ const contactSchema: Schema = new Schema(
       maxlength: 15,
       validate: {
         validator: (v: string) => {
-          return /^[\d]s+-]{10,15}$/.test(v);
+          return /^(\+0?1\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/.test(v);
         },
         message: (props: any) => `${props.value} is not a valid phone number!`,
       },
@@ -44,6 +45,6 @@ const contactSchema: Schema = new Schema(
   },
 );
 
-const Contact = model('Contact', contactSchema);
+const Contact = model<ContactType>('Contact', contactSchema);
 
 module.exports = Contact;
