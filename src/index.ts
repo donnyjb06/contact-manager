@@ -1,6 +1,8 @@
 import express = require('express');
 import { errorHandler } from './middleware/errorHandler';
 import { connectDb } from './config/dbConnection';
+import { userRoutes } from "./routes/user.routes"
+import { contactRoutes } from "./routes/contact.routes"
 
 import dotenv from "dotenv";
 dotenv.config()
@@ -11,8 +13,8 @@ connectDb();
 const app = express();
 app.use(express.json());
 
-app.use('/api/contacts', require('./routes/contact.routes'));
-app.use('/api/users', require('./routes/user.routes'));
+app.use('/api/contacts', contactRoutes);
+app.use('/api/users', userRoutes);
 app.use(errorHandler);
 
 app.listen(3000, () => {

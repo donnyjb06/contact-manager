@@ -1,9 +1,12 @@
 import { Router } from "express";
+import { registerUser, loginUser, getCurrentUser } from "../controllers/user.controller";
 
 const router = Router();
 
-router.route('/').get().post();
+router.post("/register", registerUser)
 
-router.route('/:userId').get().delete();
+router.post("/login", loginUser)
 
-module.exports = router;
+router.get("/current", getCurrentUser)
+
+export { router as userRoutes }
