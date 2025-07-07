@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { Contact as ContactType } from '../types';
+import { Contact, Contact as ContactType } from '../types';
 
 const contactSchema: Schema<ContactType> = new Schema(
   {
@@ -47,4 +47,4 @@ const contactSchema: Schema<ContactType> = new Schema(
 
 const Contact = model<ContactType>('Contact', contactSchema);
 
-module.exports = Contact;
+export { Contact };

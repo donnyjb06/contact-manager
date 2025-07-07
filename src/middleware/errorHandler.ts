@@ -1,7 +1,7 @@
 import { ErrorRequestHandler } from 'express';
-const { STATUS_CODES } = require('../utils/constants');
+import { STATUS_CODES } from '../utils/constants';
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   const status = err.statusCode ? err.statusCode : 500;
   res.status(status)
   switch (status) {
@@ -44,8 +44,4 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
       console.log('No error! Request was successful');
       break;
   }
-};
-
-module.exports = {
-  errorHandler,
 };
