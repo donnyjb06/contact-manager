@@ -1,6 +1,8 @@
 import { JwtPayload } from "jsonwebtoken"
+import { Schema } from "mongoose"
 
 interface Contact {
+  user: Schema.Types.ObjectId | DecodedUser
   firstName: string,
   lastName: string,
   email: string,

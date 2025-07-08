@@ -5,8 +5,8 @@ const contactSchema: Schema<ContactType> = new Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
-      ref: "User",
-      
+      ref: "user",
+      required: true,
     },
     firstName: {
       type: String,
