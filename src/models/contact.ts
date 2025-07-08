@@ -3,6 +3,11 @@ import { Contact, Contact as ContactType } from '../types';
 
 const contactSchema: Schema<ContactType> = new Schema(
   {
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      
+    },
     firstName: {
       type: String,
       minlength: 2,
