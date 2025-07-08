@@ -4,10 +4,11 @@ import { Contact } from '../models/contact';
 import asyncHandler from 'express-async-handler';
 import { STATUS_CODES } from '../utils/constants';
 import HttpError from '../types/Error/HttpError';
-import { User } from '../models/user';
+import { validateReqUser } from '../utils/validateReqUser';
 
 const _getAllContacts: RequestHandler = async (req, res) => {
-  const contacts: ContactType[] | [] = await Contact.find({});
+  const userId = validateReqUser(req, 'Fetching all contacts');
+  const contacts: ContactType[] | [] = await Contact.find({ user: userId });
   res.status(200).json({ contacts });
 };
 const getAllContacts = asyncHandler(_getAllContacts);
@@ -36,7 +37,9 @@ const _postNewContact: RequestHandler = async (req, res) => {
     );
   }
 
+  const userId = validateReqUser(req, 'Adding new contact');
   const contact = await Contact.create({
+    user: userId,
     firstName,
     lastName,
     phoneNumber,
@@ -54,30 +57,48 @@ const _deleteContact: RequestHandler = async (req, res) => {
     throw new HttpError('Contact Id needed', STATUS_CODES.NOT_FOUND);
   }
 
+  const userId = validateReqUser(req, "Deleting contact")
+  const contactToUpdate = await Contact.findById(id).orFail();
+  if (contactToUpdate.user.toString() !== userId) {
+    throw new HttpError("Update failed due to mismatch user ID", STATUS_CODES.FORBIDDEN)
+  }
+
   const deletedContact = await Contact.findByIdAndDelete(id).orFail();
   res.status(200).json(deletedContact);
 };
 const deleteContact = asyncHandler(_deleteContact);
 
-const _updateContact: RequestHandler = async (req, res ) => {
+const _updateContact: RequestHandler = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
-    throw new HttpError("Update failed due to missing contact ID", 400)
+    throw new HttpError(
+      'Update failed due to missing contact ID',
+      STATUS_CODES.UNAUTHORIZED,
+    );
   }
 
-  const allowedProperties = ["firstName", "lastName", "phoneNumber", "email"]
-  const updates: Record<string, any> = {}
+  const allowedProperties = ['firstName', 'lastName', 'phoneNumber', 'email'];
+  const updates: Record<string, any> = {};
 
   for (const key of Object.keys(req.body)) {
     if (allowedProperties.includes(key)) {
-      updates[key] = req.body[key]
+      updates[key] = req.body[key];
     }
   }
 
-  const updatedContact = await Contact.findByIdAndUpdate(id, updates, { new: true, runValidators: true })
+  const userId = validateReqUser(req, "Updating contact")
+  const contactToUpdate = await Contact.findById(id).orFail();
+  if (contactToUpdate.user.toString() !== userId) {
+    throw new HttpError("Update failed due to mismatch user ID", STATUS_CODES.FORBIDDEN)
+  }
 
-  res.status(200).json(updatedContact)
+  const updatedContact = await Contact.findByIdAndUpdate(id, updates, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json(updatedContact);
 };
 const updateContact = asyncHandler(_updateContact);
 
