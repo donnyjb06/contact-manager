@@ -63,11 +63,27 @@ Access token must be under header's authorization field. For example: authorizat
 
 ### Schema
 Contact Schema
-|- UserID (ObjectID | Added upon creation of contact)
-|- First Name (String)
-|- Last Name (String)
-|- Email(String)
-|- Phone Number(string)
+```
+  {
+  "_id": {
+    "$oid": "64e3f8e1f91f4e8a9a1d0009"
+  },
+  "user": {
+    "$oid": "686b6fe743c879b86343d147"
+  },
+  "firstName": "Ivy",
+  "lastName": "Rodriguez",
+  "phoneNumber": "901-234-5678",
+  "email": "ivy.rodriguez@example.com",
+  "createdAt": {
+    "$date": "2025-03-12T08:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-03-12T09:20:00.000Z"
+  },
+  "__v": 0
+}
+```
 
 
 
